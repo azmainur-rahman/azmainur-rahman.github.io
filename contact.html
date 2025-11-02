@@ -42,7 +42,14 @@
                 <!-- Contact Form -->
                 <div class="contact-form-wrapper">
                     <h2>Send Me a Message</h2>
-                    <form class="contact-form" id="contactForm">
+                    <!-- ✅ CHANGED: Added action and method attributes -->
+                    <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                        
+                        <!-- ✅ ADDED: Hidden fields for Web3Forms -->
+                        <input type="hidden" name="access_key" value="ae4a057b-59c4-446f-a347-9ea06faecc15">
+                        <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio">
+                        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+                        
                         <div class="form-group">
                             <label for="name">
                                 <i class="fas fa-user"></i> Full Name
