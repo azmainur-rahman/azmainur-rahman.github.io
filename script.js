@@ -19,29 +19,47 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// Contact Form Handling
+// ✅ UPDATED: Contact Form Handling with Web3Forms
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const subject = document.getElementById('subject').value;
-        const message = document.getElementById('message').value;
-
-        // Create mailto link
-        const mailtoLink = `mailto:kaziazmainurrahman@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
         
-        // Open email client
-        window.location.href = mailtoLink;
+        // Show loading state
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitButton.disabled = true;
         
-        // Show success message
-        alert('Thank you for your message! Your email client will open to send the message.');
-        
-        // Reset form
-        contactForm.reset();
+        try {
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Success message
+                alert('✅ Thank you for your message! I have received it and will get back to you soon.');
+                contactForm.reset();
+            } else {
+                const data = await response.json();
+                throw new Error(data.message || 'Form submission failed');
+            }
+        } catch (error) {
+            // Error message
+            console.error('Error:', error);
+            alert('❌ Oops! There was a problem sending your message. Please try again or email me directly at kaziazmainurrahman@gmail.com');
+        } finally {
+            // Reset button to original state
+            submitButton.innerHTML = originalButtonText;
+            submitButton.disabled = false;
+        }
     });
 }
 
